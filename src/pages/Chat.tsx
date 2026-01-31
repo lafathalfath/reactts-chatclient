@@ -8,9 +8,6 @@ import RoomView from "./Room";
 
 
 export default function Chat({user}: {user: User}) {
-    console.log(Date().toLocaleLowerCase());
-    console.log(new Date(Date()).getDate());
-    
     const [activeRoomId, setActiveRoomId] = useState<string | null>(null)
     const [toggleNewChat, setToggleNewChat] = useState(false)
 

@@ -12,10 +12,28 @@ function isNearBottom(el: HTMLUListElement, offset = 120): boolean {
 function extractTime(dateTime: string | null): string | null {
     if (!dateTime) return null
     const date = new Date(dateTime)
-    // const currentDate = new Date(Date())
-    const hour = date.getDay()
-    return hour.toString()
-    
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+    return `${hour}:${minute}`   
+}
+
+function extractDate(dateTime: string | null): string | null {
+    if (!dateTime) return null
+    const now = new Date()
+    const target = new Date(dateTime)
+    const diff = Math.floor((now.getTime() - target.getTime()) / (1000 * 60 * 60 * 24))
+
+    if (diff < 1) return "Today";
+    if (diff == 1) return "Yesterday"
+    if (diff < 7) return `${now.getDay() - diff}`;
+    return `${target.getDate()}-${target.getMonth()}-${target.getFullYear()}`;
+}
+
+function isPrevSameDay(current: string | null, target: string | null): boolean {
+    if (!current || !target) return false
+    const now = new Date(current).getDay()
+    const targetDay = new Date(target).getDay()
+    return now == targetDay
 }
 
 export default function RoomView({roomId, user}: {roomId: string, user: User}) {
@@ -140,7 +158,15 @@ export default function RoomView({roomId, user}: {roomId: string, user: User}) {
                 >
                     {msgData?.messages.map((m: Message, i: number) => (
                         <li key={m.id} className={`my-1 px-3 flex flex-col ${m.sender?.id == user.id && 'items-end'}`}>
-                            {room?.type == "group" && (i == 0 || (i > 0 && msgData.messages[i-1]?.sender?.id != m.sender?.id)) && 
+                            {(i == 0 || !isPrevSameDay(m.createdAt, msgData.messages[i-1].createdAt)) && <div className="w-full flex justify-center py-1">
+                                <div className="bg-gray-600 text-white text-sm rounded px-2 py-1">{extractDate(m.createdAt)}</div>
+                            </div>}
+                            {
+                                room?.type == "group" && 
+                                (i == 0 || 
+                                    (i > 0 && msgData.messages[i-1]?.sender?.id != m.sender?.id) ||
+                                    !isPrevSameDay(m.createdAt, msgData.messages[i-1].createdAt)
+                                ) && 
                                 <b>{m.sender?.id == user.id ? "You" : m.sender?.name ?? "Unknown"}:</b>
                             }
                             <div 
