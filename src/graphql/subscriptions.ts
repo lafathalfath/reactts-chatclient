@@ -12,3 +12,15 @@ export const MESSAGE_SUBS = gql`subscription ($roomId: String!) {
         createdAt
     }
 }`
+
+export const TYPING_SUBS = gql`subscription ($roomId: String!) {
+    userTyping(roomId: $roomId) {
+        roomId
+        user {
+            id
+            name
+            email
+        }
+        typing
+    }
+}`

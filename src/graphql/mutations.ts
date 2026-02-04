@@ -1,6 +1,12 @@
 import gql from "graphql-tag";
 
 
+export const REGISTER = gql`mutation ($name: String!, $email: String!, $password: String!, $passwordConfirmation: String!) {
+    createUser(input: {name: $name, email: $email, password: $password, passwordConfirmation: $passwordConfirmation}) {
+        id
+    }
+}`
+
 export const LOGIN = gql`mutation ($email: String!, $password: String!) {
     login(input: {email: $email, password: $password})
 }`
@@ -49,4 +55,8 @@ export const SEND_MESSAGE = gql`mutation ($content: String!, $roomId: String!) {
         roomId
         createdAt
     }
+}`
+
+export const TYPING = gql`mutation ($roomId: String!, $isTyping: Boolean!) {
+    typing(roomId: $roomId, isTyping: $isTyping)
 }`

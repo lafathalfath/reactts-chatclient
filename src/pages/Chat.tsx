@@ -24,13 +24,24 @@ export default function Chat({user}: {user: User}) {
         }
     })
 
+    const handleUnread = (data: {roomId: string, unreadCount: number}[]) => {
+        data.forEach(item => {
+            console.log(document.getElementById(`unread-${item.roomId}`))
+        });
+    }
+
     return <div className="h-dvh w-full bg-blue-900">
 
         <div className="h-full w-full">
-            
             <div className="h-full flex">
                 {roomLoading ? "Loading..." : 
                     <div className="w-1/5 h-full bg-gray-800">
+                        <div className="flex items-center gap-3 p-3 border-b border-[#343f4f]">
+                            <div className="w-10 h-10 rounded-full bg-gray-500"></div>
+                            <div className="text-gray-200 text-lg font-bold">
+                                {user.name}
+                            </div>
+                        </div>
                         <div className="w-full p-3">
                             <button className="cursor-pointer bg-yellow-600 rounded px-2" onClick={() => setToggleNewChat(!toggleNewChat)}>
                                 + New Chat
@@ -41,10 +52,15 @@ export default function Chat({user}: {user: User}) {
                             {roomData?.myRooms.map((r: Room) => (
                                 <div key={r.id}>
                                     <li 
-                                        className="px-4 py-2 border-b border-[#343f4f] hover:bg-[#242f3f] cursor-pointer font-bold text-lg"
+                                        className="flex items-center justify-between px-4 py-2 border-b border-[#343f4f] hover:bg-[#242f3f] cursor-pointer font-bold text-lg"
                                         onClick={() => setActiveRoomId(r.id)}
                                     >
-                                        {r.name || "DM"}
+                                        <div className="text-ellipsis overflow-hidden">
+                                            {r.name || "DM"}
+                                        </div>
+                                        <div id={`unread-${r.id}`}>
+                                            <div id="count" className="rounded-full bg-red-500 text-xs w-fit px-1.5 flex justify-center items-center">1</div>
+                                        </div>
                                     </li>
                                 </div>
                             ))}
@@ -74,6 +90,7 @@ export default function Chat({user}: {user: User}) {
                         // key={activeRoomId}
                         roomId={activeRoomId} 
                         user={user}
+                        onUnread={handleUnread}
                     />}
                 </div>
             </div>

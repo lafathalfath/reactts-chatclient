@@ -6,6 +6,13 @@ export type User = {
     password: string | null
 }
 
+export type NewUser = {
+    name: string
+    email: string
+    password: string
+    passwordConfirmation: string
+}
+
 export type Room = {
     id: string | null
     type: string | null
@@ -21,4 +28,10 @@ export type Message = {
     roomId: string | null
     createdAt: string | null
     optimistic?: boolean
+}
+
+export type TypingEvent = {
+    roomId: string | null
+    user: User | null
+    typing: boolean
 }

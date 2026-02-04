@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client/react";
-import { LOGIN } from "../graphql/mutations";
+import { LOGIN } from "../../graphql/mutations";
 import { useState } from "react";
 
 
-export default function Login() {
+export default function Login({onToRegister}: {onToRegister: any}) {
     const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const [cred, setCred] = useState<{email: string, password: string}>({
@@ -21,7 +21,7 @@ export default function Login() {
             <h2 className="text-center text-xl font-bold p-5">Login</h2>
         </div>
         <form 
-            className="flex flex-col items-center justify-center gap-2 p-5 bg-zinc-100 w-78 h-48"
+            className="flex flex-col items-center justify-center gap-2 p-5 bg-zinc-100 w-78 text-gray-800"
             onSubmit={(e) => {
                 e.preventDefault()
                 login({
@@ -37,10 +37,12 @@ export default function Login() {
             <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? "hide password" : "show password"}</button>
             <button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 cursor-pointer px-3 py-1 rounded text-white"
+                className="w-full bg-green-600 hover:bg-green-700 cursor-pointer px-3 py-1 rounded text-white"
             >
                 Login
-            </button>    
+            </button>
+            or
+            <button className="text-sm text-gray-600" onClick={() => {onToRegister()}}>Register</button>
         </form>
     </div>
 }
